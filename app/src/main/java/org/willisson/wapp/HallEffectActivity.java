@@ -8,6 +8,8 @@ import android.hardware.SensorManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 
 public class HallEffectActivity extends AppCompatActivity {
 
@@ -16,6 +18,10 @@ public class HallEffectActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_hall);
+
+	if (GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(getApplicationContext()) == ConnectionResult.SUCCESS) {
+	    ((TextView)findViewById(R.id.gms)).setText("Google Play Services found.");
+	}
 
 	final TextView text_view = (TextView) findViewById(R.id.output);
 
