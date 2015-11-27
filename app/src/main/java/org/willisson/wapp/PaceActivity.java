@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -21,6 +22,7 @@ public class PaceActivity extends AppCompatActivity {
     public Thread timer, rcv_thread;
     public boolean keep_going;
     public WifiManager.MulticastLock multicast_lock;
+    public TextView last_msg_textview;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +40,9 @@ public class PaceActivity extends AppCompatActivity {
             }
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        last_msg_textview = (TextView)findViewById (R.id.last_msg);
+        Log.i("WAPP", "last_msg_textview " + last_msg_textview);
 
         rcv_thread_setup();
     }
@@ -117,9 +122,15 @@ public class PaceActivity extends AppCompatActivity {
             DatagramPacket rpkt = new DatagramPacket(rbuf, rbuf.length);
             Log.i ("WAPP", "about to call receive");
             socket.receive(rpkt);
-            String rmsg = new String (rpkt.getData(), 0, rpkt.getLength(), "UTF-8");
+            final String rmsg = new String (rpkt.getData(), 0, rpkt.getLength(), "UTF-8");
             Log.i("WAPP", "rcv " + " " + rpkt.getSocketAddress() + " " + rmsg);
             Log.i("WAPP", "lock: " + multicast_lock.isHeld() + " " + multicast_lock);
+
+            runOnUiThread (new Runnable () {
+                public void run () {
+                    last_msg_textview.setText (rmsg);
+                }
+            });
 
         } catch (Exception e) {
             Log.i ("WAPP", "rcv_step error " + e);
