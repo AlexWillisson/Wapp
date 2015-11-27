@@ -18,7 +18,7 @@ public class RootActivity extends AppCompatActivity {
 	startActivity(intent);
     }
 
-    public void start_hall_effect(View v) {
+    public void start_hall(View v) {
 	Intent intent = new Intent(this, HallEffectActivity.class);
 	startActivity(intent);
     }
