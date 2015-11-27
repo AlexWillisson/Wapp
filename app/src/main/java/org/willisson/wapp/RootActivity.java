@@ -14,17 +14,17 @@ public class RootActivity extends AppCompatActivity {
     }
 
     public void start_alex (View view) {
-	Intent intent = new Intent (this, AlexActivity.class);
-	startActivity(intent);
+		Intent intent = new Intent (this, AlexActivity.class);
+		startActivity(intent);
     }
 
     public void start_pace (View view) {
-	Intent intent = new Intent (this, PaceActivity.class);
-	startActivity(intent);
+		Intent intent = new Intent (this, PaceActivity.class);
+		startActivity(intent);
     }
 
     public void start_hall(View v) {
-	Intent intent = new Intent(this, HallEffectActivity.class);
-	startActivity(intent);
+		Intent intent = new Intent(this, HallEffectActivity.class);
+		startActivity(intent);
     }
 }
