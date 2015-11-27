@@ -12,15 +12,15 @@ import android.view.View;
 
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
-import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.MulticastSocket;
 
 public class PaceActivity extends AppCompatActivity {
-    public DatagramSocket socket;
-    public Thread timer;
-    public boolean timer_keep_running;
+    public MulticastSocket socket;
+    public Thread timer, rcv_thread;
+    public boolean keep_going;
+    public WifiManager.MulticastLock multicast_lock;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,66 +39,58 @@ public class PaceActivity extends AppCompatActivity {
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        timer_setup();
-
-
+        rcv_thread_setup();
     }
 
     @Override
     protected void onDestroy() {
-        timer_keep_running = false;
+        keep_going = false;
         super.onDestroy();
 
     }
 
-    void timer_setup() {
-        Log.i("WAPP", "timer_setup");
-        if (timer == null) {
-            Log.i ("WAPP", "creating new timer");
-            timer = new Thread() {
+    void rcv_thread_setup() {
+        Log.i("WAPP", "rcv_thread_setup");
+        if (rcv_thread == null) {
+            rcv_thread = new Thread() {
                 public void run() {
                     udp_setup ();
 
                     try {
-                        while (timer_keep_running) {
-                            Log.i("WAPP", "tick");
-                            udp_tick ();
-                            Thread.sleep(1000);
+                        while (keep_going) {
+                            rcv_step ();
                         }
                     } catch (Exception e) {
-                        Log.i("WAPP", "thread error " + e);
+                        Log.i("WAPP", "rcv_thread error " + e);
                     }
-                    Log.i ("WAPP", "timer done");
                 }
             };
-            Log.i ("WAPP", "starting timer");
-            timer_keep_running = true;
-            timer.start();
+            Log.i ("WAPP", "starting rcv_thread");
+            keep_going = true;
+            rcv_thread.start();
         }
     }
 
     void udp_setup () {
         Log.i ("WAPP", "doing udp_setup");
         try {
-            WifiManager wifi = (WifiManager)getSystemService(Context.WIFI_SERVICE);
-            WifiManager.MulticastLock lock = wifi.createMulticastLock ("WAPP");
-            lock.acquire();
-            Log.i("WAPP", "got lock");
+
 
             if (socket == null) {
                 Log.i ("WAPP", "creating multicast socket");
                 socket = new MulticastSocket(20151);
 
-                InetSocketAddress addr;
-                addr = new InetSocketAddress("224.0.0.1", 20151);
-                socket.connect(addr);
-                if (socket.getLocalAddress().getAddress()[0] == 10) {
-                    Log.i ("WAPP", "setup for emulator");
-                    socket.close();
-                    socket = new DatagramSocket(20151);
-                    addr = new InetSocketAddress("192.168.1.157", 20151);
-                    socket.connect(addr);
-                }
+
+                Log.i ("WAPP", "my socket " + socket.getLocalAddress());
+
+                WifiManager wifi = (WifiManager)getSystemService(Context.WIFI_SERVICE);
+                multicast_lock = wifi.createMulticastLock ("WAPP");
+                Log.i("APP", "about to lock: " + multicast_lock.isHeld());
+                multicast_lock.acquire();
+                Log.i("WAPP", "got lock: " + multicast_lock.isHeld() + " " + multicast_lock);
+
+                InetAddress maddr = InetAddress.getByName ("224.0.0.1");
+                socket.joinGroup(maddr);
             }
        } catch (Exception e) {
             Log.i("WAPP", "udp error " + e);
@@ -116,6 +108,21 @@ public class PaceActivity extends AppCompatActivity {
             Log.i("WAPP", "send done");
         } catch (Exception e) {
             Log.i ("WAPP", "udp_tick error" + e);
+        }
+    }
+
+    void rcv_step () {
+        try {
+            byte[] rbuf = new byte[2000];
+            DatagramPacket rpkt = new DatagramPacket(rbuf, rbuf.length);
+            Log.i ("WAPP", "about to call receive");
+            socket.receive(rpkt);
+            String rmsg = new String (rpkt.getData(), 0, rpkt.getLength(), "UTF-8");
+            Log.i("WAPP", "rcv " + " " + rpkt.getSocketAddress() + " " + rmsg);
+            Log.i("WAPP", "lock: " + multicast_lock.isHeld() + " " + multicast_lock);
+
+        } catch (Exception e) {
+            Log.i ("WAPP", "rcv_step error " + e);
         }
     }
 
