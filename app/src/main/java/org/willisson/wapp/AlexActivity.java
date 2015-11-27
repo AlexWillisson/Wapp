@@ -34,7 +34,7 @@ public class AlexActivity extends AppCompatActivity {
 		send_toast("hello, world");
 	}
 
-	public void start_service (View view) {
+	public void sample_notification (View view) {
 		send_toast ("notifying");
 		Notification.Builder builder = new Notification.Builder (this)
 			.setSmallIcon (R.mipmap.ic_launcher)
