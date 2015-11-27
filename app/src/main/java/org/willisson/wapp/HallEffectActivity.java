@@ -23,14 +23,11 @@ public class HallEffectActivity extends AppCompatActivity {
 	sm.registerListener(new SensorEventListener() {
 		public void onAccuracyChanged(Sensor sensor, int accuracy) { }
 		public void onSensorChanged(SensorEvent event) {
-		    //		    StringBuilder sb = new StringBuilder();
 		    double strength = 0;
 		    for (int i = 0; i < 3; i++) {
-			//			sb.append(event.values[i] + "\n");
 			strength += event.values[i] * event.values[i];
 		    }
 		    strength = Math.sqrt(strength);
-		    //		    text_view.setText(sb.toString());
 		    text_view.setText(Double.toString(strength));
 		}
 	    }, sm.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD), 100000);
