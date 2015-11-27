@@ -34,14 +34,27 @@ public class AlexActivity extends AppCompatActivity {
 		send_toast("hello, world");
 	}
 
-	public void sample_notification (View view) {
+	public void sample_notification1 (View view) {
 		send_toast ("notifying");
 		Notification.Builder builder = new Notification.Builder (this)
 			.setSmallIcon (R.mipmap.ic_launcher)
 			.setContentTitle ("foo")
-			.setContentText ("bar baz");
+			.setContentText ("bar baz")
+			.setOngoing (true);
 		Notification notification = builder.build ();
-		nm.notify (9999, notification);
+		nm.notify (42, notification);	
+		Log.i ("WAPP", "notified!");
+	}
+
+	public void sample_notification2 (View view) {
+		send_toast ("notifying");
+		Notification.Builder builder = new Notification.Builder (this)
+			.setSmallIcon (R.mipmap.ic_launcher)
+			.setContentTitle ("bar")
+			.setContentText ("quuuuux")
+			.setOngoing (true);
+		Notification notification = builder.build ();
+		nm.notify (42, notification);	
 		Log.i ("WAPP", "notified!");
 	}
 
