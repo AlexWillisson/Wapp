@@ -20,5 +20,6 @@
         android:id="@+id/button2"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="22dp" />
+        android:layout_marginTop="22dp"
+	android:onClick="toast_btn" />
 </RelativeLayout>

@@ -19,13 +19,15 @@ public class AlexActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-		send_toast ("hello, world");
     }
+
+	public void toast_btn (View view) {
+		send_toast ("hello, world");
+	}
 
 	public void send_toast (String text) {
 		Context context = getApplicationContext ();
-		int duration = Toast.LENGTH_LONG;
+		int duration = Toast.LENGTH_SHORT;
 		Toast toast = Toast.makeText (context, text, duration);
 		toast.show ();
 	}

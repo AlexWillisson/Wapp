@@ -6,3 +6,6 @@ push-apk:
 
 wapp:
 	gradlew assembleDebug
+
+load-wapp:
+	adb install -r app/build/outputs/apk/app-debug.apk
