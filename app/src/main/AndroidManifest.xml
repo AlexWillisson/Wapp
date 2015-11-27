@@ -15,6 +15,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".AlexActivity"
+            android:label="@string/title_activity_alex"
+            android:parentActivityName=".RootActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.willisson.wapp.RootActivity" />
+        </activity>
     </application>
 
 </manifest>
