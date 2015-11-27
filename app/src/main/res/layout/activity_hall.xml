@@ -7,15 +7,12 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="org.willisson.wapp.MainActivity">
+    tools:context="org.willisson.wapp.HallEffectActivity">
 
     <TextView
+	android:id="@+id/output"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!" />
-    <Button
-	android:layout_width="wrap_content"
-	android:layout_height="wrap_content"
-	android:text="Hall Effect Sensor"
-	android:onClick="startHallEffect" />
+	android:singleLine="false"
+        android:text="Output here." />
 </RelativeLayout>
