@@ -12,13 +12,13 @@
     tools:context="org.willisson.wapp.AlexActivity"
     tools:showIn="@layout/activity_alex">
 
-    <TextView
+
+    <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Alex&apos;s activity"
-        android:id="@+id/textView"
+        android:text="Toast"
+        android:id="@+id/button2"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="72dp" />
+        android:layout_marginTop="22dp" />
 </RelativeLayout>
