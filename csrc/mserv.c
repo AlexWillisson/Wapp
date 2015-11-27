@@ -5,6 +5,7 @@
 #include <fcntl.h>
 #include <netinet/in.h>
 #include <sys/socket.h>
+#include <arpa/inet.h>
 
 void
 usage (void)
@@ -26,6 +27,7 @@ main (int argc, char **argv)
 	socklen_t raddrlen;
 	int n;
 	char rpkt[10000];
+	char fromstr[1000];
 
 	while ((c = getopt (argc, argv, "")) != EOF) {
 		switch (c) {
@@ -75,7 +77,11 @@ main (int argc, char **argv)
 		}
 
 		rpkt[n] = 0;
-		printf ("rcv: %s\n", rpkt);
+
+		sprintf (fromstr, "%s:%d",
+			 inet_ntoa (raddr.sin_addr),
+			 ntohs (raddr.sin_port));
+		printf ("%-25s: %s\n", fromstr, rpkt);
 	}
 
 	return (0);
