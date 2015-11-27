@@ -6,3 +6,9 @@
 .DS_Store
 /build
 /captures
+<<<<<<< HEAD
+=======
+*~
+*.undo-tree*
+.idea
+>>>>>>> 9087f3b3683f436534c84e608b7b3c52a0f47e49

@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">hello world</string>
+    <string name="app_name">Wapp</string>
+    <string name="title_activity_alex">AlexActivity</string>
 </resources>
