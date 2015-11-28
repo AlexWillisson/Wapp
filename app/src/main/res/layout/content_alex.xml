@@ -20,13 +20,13 @@
         android:id="@+id/mapbtn"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="22dp"
+        android:layout_marginTop="30dp"
 	android:onClick="to_map" />
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Toast"
-        android:id="@+id/button2"
+        android:id="@+id/toastbtn"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="80dp"
@@ -35,7 +35,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Notification"
-        android:id="@+id/button2"
+        android:id="@+id/n1btn"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="130dp"
@@ -44,10 +44,37 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Notification"
-        android:id="@+id/button2"
+        android:id="@+id/n2btn"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="180dp"
 	android:onClick="sample_notification2" />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Start Multicast"
+        android:id="@+id/multicastbtn"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="230dp"
+	android:onClick="start_multicast" />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Save"
+        android:id="@+id/savebtn"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="280dp"
+	android:onClick="save_stuff" />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Load"
+        android:id="@+id/loadbtn"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="320dp"
+	android:onClick="load_stuff" />
 
 </RelativeLayout>

@@ -4,6 +4,7 @@ import android.app.NotificationManager;
 import android.app.Notification;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
@@ -26,13 +27,16 @@ import java.net.MulticastSocket;
 public class AlexActivity extends AppCompatActivity {
     public MulticastSocket socket;
     public Thread timer, rcv_thread;
-    public boolean keep_going;
+    public boolean keep_going, multicast_active;
     public WifiManager.MulticastLock multicast_lock;
     public TextView last_msg_textview;
 	public AppCompatActivity alex_activity;
 	NotificationManager nm;
 	PowerManager pm;
 	PowerManager.WakeLock wl;
+	String last_notification;
+	SharedPreferences prefs;
+	SharedPreferences.Editor prefs_editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,15 +44,36 @@ public class AlexActivity extends AppCompatActivity {
         setContentView(R.layout.activity_alex);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 		nm = (NotificationManager) getSystemService (Context.NOTIFICATION_SERVICE);
 		alex_activity = this;
-        rcv_thread_setup ();
 		pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-		wl = pm.newWakeLock (PowerManager.FULL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.ON_AFTER_RELEASE, "wltag");
+		multicast_active = false;
+		last_notification = "";
+		prefs = getSharedPreferences ("ATW", MODE_PRIVATE);
+		prefs_editor = prefs.edit ();
     }
+
+	public void save_stuff (View view) {
+		send_toast ("saving :'" + last_notification);
+		prefs_editor.putString("last_notification", last_notification);
+		prefs_editor.commit();
+	}
+
+	public void load_stuff (View view) {
+		String s = prefs.getString ("last_notification",
+									"THIS SPACE INTENTIONALLY LEFT BLANK");
+		send_toast (s);
+	}
+
+	public void start_multicast (View view) {
+		if (multicast_active == false) {
+			multicast_active = true;
+			rcv_thread_setup ();
+			wl = pm.newWakeLock (PowerManager.FULL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.ON_AFTER_RELEASE, "wltag");
+		}
+	}
 
 	public void toast_btn (View view) {
 		send_toast("hello, world");
@@ -62,6 +87,7 @@ public class AlexActivity extends AppCompatActivity {
 			.setOngoing (true);
 		Notification notification = builder.build ();
 		nm.notify(42, notification);
+		last_notification = "bar baz";
 	}
 
 	public void sample_notification2 (View view) {
@@ -72,6 +98,7 @@ public class AlexActivity extends AppCompatActivity {
 			.setOngoing (true);
 		Notification notification = builder.build ();
 		nm.notify (42, notification);	
+		last_notification = "quuuuux";
 	}
 
 	public void send_toast (String text) {
@@ -180,6 +207,7 @@ public class AlexActivity extends AppCompatActivity {
                             .setOngoing(true);
                     Notification notification = builder.build();
                     nm.notify(42, notification);
+					last_notification = rmsg;
                 }
             });
 
