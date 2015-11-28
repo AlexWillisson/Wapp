@@ -16,11 +16,20 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="Map"
+        android:id="@+id/mapbtn"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="22dp"
+	android:onClick="to_map" />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="Toast"
         android:id="@+id/button2"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="22dp"
+        android:layout_marginTop="80dp"
 	android:onClick="toast_btn" />
     <Button
         android:layout_width="wrap_content"
@@ -29,7 +38,7 @@
         android:id="@+id/button2"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="130dp"
 	android:onClick="sample_notification1" />
     <Button
         android:layout_width="wrap_content"
@@ -38,7 +47,7 @@
         android:id="@+id/button2"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="130dp"
+        android:layout_marginTop="180dp"
 	android:onClick="sample_notification2" />
 
 </RelativeLayout>

@@ -81,10 +81,17 @@ public class AlexActivity extends AppCompatActivity {
 		toast.show();
 	}
 
+	public void to_map (View view) {
+		Intent intent = new Intent (this, MapsActivity.class);
+		startActivity(intent);
+	}
+
     @Override
     protected void onDestroy() {
         keep_going = false;
-		wl.release ();
+		if (wl.isHeld ()) {
+			wl.release ();
+		}
         super.onDestroy();
     }
 

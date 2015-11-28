@@ -3,4 +3,5 @@
     <string name="title_activity_alex">AlexActivity</string>
     <string name="title_activity_pace">PaceActivity</string>
     <string name="title_activity_bt">BtActivity</string>
+    <string name="title_activity_maps">Map</string>
 </resources>
