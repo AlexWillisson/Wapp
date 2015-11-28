@@ -15,6 +15,7 @@ import android.support.v7.app.NotificationCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,6 +32,7 @@ public class AlexActivity extends AppCompatActivity {
 	public AppCompatActivity alex_activity;
 	NotificationManager nm;
 	PowerManager pm;
+	PowerManager.WakeLock wl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +46,8 @@ public class AlexActivity extends AppCompatActivity {
 		nm = (NotificationManager) getSystemService (Context.NOTIFICATION_SERVICE);
 		alex_activity = this;
         rcv_thread_setup ();
+		pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+		wl = pm.newWakeLock (PowerManager.FULL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.ON_AFTER_RELEASE, "wltag");
     }
 
 	public void toast_btn (View view) {
@@ -57,7 +61,7 @@ public class AlexActivity extends AppCompatActivity {
 			.setContentText ("bar baz")
 			.setOngoing (true);
 		Notification notification = builder.build ();
-		nm.notify (42, notification);	
+		nm.notify(42, notification);
 	}
 
 	public void sample_notification2 (View view) {
@@ -80,8 +84,8 @@ public class AlexActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         keep_going = false;
+		wl.release ();
         super.onDestroy();
-
     }
 
     void rcv_thread_setup() {
@@ -156,20 +160,19 @@ public class AlexActivity extends AppCompatActivity {
             Log.i("WAPP", "rcv " + " " + rpkt.getSocketAddress() + " " + rmsg);
             Log.i("WAPP", "lock: " + multicast_lock.isHeld() + " " + multicast_lock);
 
-			pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-            PowerManager.WakeLock wl = pm.newWakeLock (PowerManager.PARTIAL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "wltag");
-            wl.acquire();
+			wl.acquire ();
+			wl.release ();
 
-            runOnUiThread (new Runnable () {
-                public void run () {
-					Notification.Builder builder
-						= new Notification.Builder (alex_activity)
-						.setSmallIcon (R.mipmap.ic_launcher)
-						.setContentTitle ("pkt")
-						.setContentText (rmsg)
-						.setOngoing(true);
-					Notification notification = builder.build();
-					nm.notify(42, notification);
+            runOnUiThread (new Runnable() {
+                public void run() {
+                    Notification.Builder builder
+                            = new Notification.Builder(alex_activity)
+                            .setSmallIcon(R.mipmap.ic_launcher)
+                            .setContentTitle("pkt")
+                            .setContentText(rmsg)
+                            .setOngoing(true);
+                    Notification notification = builder.build();
+                    nm.notify(42, notification);
                 }
             });
 
