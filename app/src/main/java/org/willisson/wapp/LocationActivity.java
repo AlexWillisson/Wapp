@@ -18,7 +18,8 @@ import com.google.android.gms.common.GoogleApiAvailability;
 public class LocationActivity extends AppCompatActivity {
 
     LocationManager loc_man;
-    LocationListener loc_listener;
+    LocationListener cell_listener;
+    LocationListener gps_listener;
 
     private final int PERMISSIONS = 1;
 
@@ -59,28 +60,45 @@ public class LocationActivity extends AppCompatActivity {
 	final TextView text_view = (TextView) findViewById(R.id.output);
 
 	loc_man = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-	loc_listener = new LocationListener() {
+	cell_listener = new LocationListener() {
 		public void onLocationChanged(Location location) {
-		    text_view.setText(location.getLatitude() + ", " + location.getLongitude());
+		    text_view.setText("Cell " + location.getLatitude() + ", " + location.getLongitude() + " (" + location.getAccuracy() + ")");
 		}
 		public void onStatusChanged(String provider, int status, Bundle extras) { }
 		public void onProviderEnabled(String provider) { }
 		public void onProviderDisabled(String provider) { }
 	    };
-	loc_man.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, loc_listener);
+	gps_listener = new LocationListener() {
+		public void onLocationChanged(Location location) {
+		    loc_man.removeUpdates(cell_listener);
+		    text_view.setText("GPS " + location.getLatitude() + ", " + location.getLongitude() + " (" + location.getAccuracy() + ")");
+		}
+		public void onStatusChanged(String provider, int status, Bundle extras) { }
+		public void onProviderEnabled(String provider) { }
+		public void onProviderDisabled(String provider) { }
+	    };
+	loc_man.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, cell_listener);
+	loc_man.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, gps_listener);
+    }
+
+    private void clear_location_listeners() {
+	if (loc_man != null) {
+	    if (cell_listener != null) {
+		loc_man.removeUpdates(cell_listener);
+	    }
+	    if (gps_listener != null) {
+		loc_man.removeUpdates(gps_listener);
+	    }
+	}
     }
 
     protected void onPause() {
 	super.onPause();
-	if (loc_man != null) {
-	    loc_man.removeUpdates(loc_listener);
-	}
+	clear_location_listeners();
     }
     protected void onStop() {
 	super.onStop();
-	if (loc_man != null) {
-	    loc_man.removeUpdates(loc_listener);
-	}
+	clear_location_listeners();
     }
 
     public void send_toast (String text) {
