@@ -32,4 +32,9 @@ public class RootActivity extends AppCompatActivity {
 		Intent intent = new Intent(this, HallEffectActivity.class);
 		startActivity(intent);
     }
+
+    public void start_location(View v) {
+		Intent intent = new Intent(this, LocationActivity.class);
+		startActivity(intent);
+    }
 }
