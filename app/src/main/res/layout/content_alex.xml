@@ -74,7 +74,16 @@
         android:id="@+id/loadbtn"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="320dp"
+        android:layout_marginTop="330dp"
 	android:onClick="load_stuff" />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Dump fake loc"
+        android:id="@+id/dump"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="380dp"
+	android:onClick="dump_loclog" />
 
 </RelativeLayout>

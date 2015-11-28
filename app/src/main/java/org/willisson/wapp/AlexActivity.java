@@ -19,10 +19,12 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
+import java.util.ArrayList;
 
 public class AlexActivity extends AppCompatActivity {
     public MulticastSocket socket;
@@ -53,6 +55,25 @@ public class AlexActivity extends AppCompatActivity {
 		last_notification = "";
 		prefs = getSharedPreferences ("ATW", MODE_PRIVATE);
 		prefs_editor = prefs.edit ();
+
+		if (prefs.getBoolean ("initialized", false) == false) {
+			send_toast ("initializing");
+
+			prefs_editor.putFloat ("13:34lat", 42);
+			prefs_editor.putFloat ("13:34lon", -71);
+
+			prefs_editor.putFloat ("13:44lat", 43);
+			prefs_editor.putFloat ("13:44lon", -71);
+
+			prefs_editor.putFloat ("13:54lat", 43);
+			prefs_editor.putFloat ("13:54lon", -70);
+
+			prefs_editor.putFloat ("14:04lat", 42);
+			prefs_editor.putFloat ("14:04lon", -70);
+
+			prefs_editor.putBoolean ("initialized", true);
+			prefs_editor.commit ();
+		}
     }
 
 	public void save_stuff (View view) {
@@ -65,6 +86,36 @@ public class AlexActivity extends AppCompatActivity {
 		String s = prefs.getString ("last_notification",
 									"THIS SPACE INTENTIONALLY LEFT BLANK");
 		send_toast (s);
+	}
+
+	public void dump_loclog (View view) {
+		int hr, min, idx;
+		String time, latkey, lonkey;
+        float lat, lon;
+		ArrayList<LocLog> hist;
+		LocLog node;
+
+		hist = new ArrayList<LocLog> ();
+
+		for (hr = 0; hr < 24; hr++) {
+			for (min = 0; min < 60; min++) {
+				time = hr + ":" + String.format ("%02d", min);
+				latkey = time + "lat";
+				lonkey = time + "lon";
+
+				lat = prefs.getFloat (latkey, 0);
+				lon = prefs.getFloat (lonkey, 0);
+
+				if (lat != 0 && lon != 0) {
+					hist.add (new LocLog (new LatLng (lat, lon), time));
+				}
+			}
+		}
+
+		for (idx = 0; idx < hist.size (); idx++) {
+			node = hist.get (idx);
+			Log.i ("WAPP", "loc: " + node.loc + ", time: " + node.tag);
+		}
 	}
 
 	public void start_multicast (View view) {
@@ -116,7 +167,7 @@ public class AlexActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         keep_going = false;
-		if (wl.isHeld ()) {
+		if (wl != null && wl.isHeld ()) {
 			wl.release ();
 		}
         super.onDestroy();
@@ -215,4 +266,14 @@ public class AlexActivity extends AppCompatActivity {
             Log.i ("WAPP", "rcv_step error " + e);
         }
     }
+}
+
+class LocLog {
+	public LatLng loc;
+	public String tag;
+
+	public LocLog (LatLng latlng, String title) {
+		loc = latlng;
+		tag = title;
+	}
 }
