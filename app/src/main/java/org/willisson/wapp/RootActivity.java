@@ -19,8 +19,13 @@ public class RootActivity extends AppCompatActivity {
     }
 
     public void start_pace (View view) {
-		Intent intent = new Intent (this, PaceActivity.class);
-		startActivity(intent);
+        Intent intent = new Intent (this, PaceActivity.class);
+        startActivity(intent);
+    }
+
+    public void start_bt (View view) {
+        Intent intent = new Intent (this, BtActivity.class);
+        startActivity(intent);
     }
 
     public void start_hall(View v) {

@@ -36,4 +36,11 @@
         android:text="Pace"
         android:id="@+id/button_pace"
         android:onClick="start_pace" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Bluetooth"
+        android:id="@+id/button_bt"
+        android:onClick="start_bt" />
 </LinearLayout>
