@@ -17,12 +17,6 @@
 	android:singleLine="false"
         android:text="Looking for location..." />
 
-<!--    <LinearLayout
-	android:orientation="horizontal"
-	android:layout_width="match_parent"
-	android:layout_height="match_parent">
--->
-
       <Button
 	  android:layout_width="wrap_content"
 	  android:layout_height="wrap_content"
@@ -36,12 +30,18 @@
 	  android:text="Load Location"
 	  android:id="@+id/Load_location"
 	  android:onClick="load_location" />
-<!--    </LinearLayout>-->
 
     <TextView
 	android:id="@+id/saved"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Saved/restored location will go here." />
+
+      <Button
+	  android:layout_width="wrap_content"
+	  android:layout_height="wrap_content"
+	  android:text="See Saved Location"
+	  android:id="@+id/see_location"
+	  android:onClick="see_location" />
 
 </LinearLayout>

@@ -1,12 +1,14 @@
 package org.willisson.wapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.Manifest;
+import android.net.Uri;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -158,6 +160,18 @@ public class LocationActivity extends AppCompatActivity {
 	if (json != "") {
 	    Location location = gson.fromJson(json, Location.class);
 	    show_location((TextView)findViewById(R.id.saved), location, prefs.getString("type", ""));
+	} else {
+	    send_toast("No saved location found.");
+	}
+    }
+
+    public void see_location(View v) {
+	String json = prefs.getString("location", "");
+	if (json != "") {
+	    Location location = gson.fromJson(json, Location.class);
+	    Uri place_uri = Uri.parse("geo:" + location.getLatitude() + "," + location.getLongitude() + "?z=21");
+	    Intent map_intent = new Intent(Intent.ACTION_VIEW, place_uri);
+	    startActivity(map_intent);
 	} else {
 	    send_toast("No saved location found.");
 	}
