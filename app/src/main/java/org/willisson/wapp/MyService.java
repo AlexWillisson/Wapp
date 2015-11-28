@@ -26,7 +26,7 @@ public class MyService extends IntentService {
                 e.printStackTrace();
             }
             count++;
-
+            Log.i ("WAPP", "tick " + count);
             Intent i2 = new Intent (PaceActivity.ACTION_UPDATE);
             i2.putExtra ("val", "count = " + count);
             LocalBroadcastManager.getInstance(this).sendBroadcast(i2);
