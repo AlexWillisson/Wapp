@@ -75,6 +75,8 @@
             </intent-filter>
         </receiver>
 
+        <service android:name=".MyService"/>
+
         <activity android:name=".LocationActivity" />
 
     </application>

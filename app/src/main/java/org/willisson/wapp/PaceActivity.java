@@ -1,10 +1,14 @@
 package org.willisson.wapp;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -44,6 +48,11 @@ public class PaceActivity extends AppCompatActivity {
         last_msg_textview = (TextView)findViewById (R.id.last_msg);
         Log.i("WAPP", "last_msg_textview " + last_msg_textview);
 
+        LocalBroadcastManager mgr = LocalBroadcastManager.getInstance (this);
+        IntentFilter filter = new IntentFilter();
+        filter.addAction (ACTION_UPDATE);
+        mgr.registerReceiver(brcv, filter);
+
         rcv_thread_setup();
     }
 
@@ -53,6 +62,17 @@ public class PaceActivity extends AppCompatActivity {
         super.onDestroy();
 
     }
+    public static final String ACTION_UPDATE = "org.willisson.wapp.ACTION_UPDATE";
+
+    private BroadcastReceiver brcv = new BroadcastReceiver () {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals (ACTION_UPDATE)) {
+                String val = intent.getStringExtra ("val");
+                Log.i ("WAPP", "got update intent: " + val);
+            }
+        }
+    };
 
     void rcv_thread_setup() {
         Log.i("WAPP", "rcv_thread_setup");
@@ -135,6 +155,12 @@ public class PaceActivity extends AppCompatActivity {
         } catch (Exception e) {
             Log.i ("WAPP", "rcv_step error " + e);
         }
+    }
+
+    public void start_service(View view) {
+        Log.i ("WAPP", "start_service");
+        Intent intent = new Intent (this, MyService.class);
+        startService (intent);
     }
 
 }
